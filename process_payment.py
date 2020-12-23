@@ -41,7 +41,7 @@ class Validate:
             return False
 
     def validate_data(self):
-        """[Validates credit card details]
+        """[Validates credit card details involved in transaction]
 
         Returns:
             [Response]: [Returns response if the card details are invalid]
@@ -89,7 +89,7 @@ class Payment:
         self.tries = 0
 
     def process_payment(self,credit_card_number, card_holder, expiration_date, security_code, amount):
-        """[Validates credit card related data and passes payment related to payment gateway]
+        """[Processes credit card payments using  payment gateway]
 
         Args:
             credit_card_number ([str]): [credit card number used in the transaction]
@@ -101,6 +101,7 @@ class Payment:
         Returns:
             [response]: [Response from payment gateway]
         """
+        object = True # To check whether the payment gateway is available
         v = Validate(credit_card_number, card_holder, expiration_date, security_code, amount)
         v.validate_data()
         payment = Payment()
@@ -122,9 +123,10 @@ class Payment:
 
             if amount >= 500:
                 if object:
-                    resp = PremiumPaymentGateway(credit_card_number, card_holder, expiration_date, security_code, amount)
-                    payment.tries +=1
-                    return resp
+                    while payment.tries <= 3:
+                        resp = PremiumPaymentGateway(credit_card_number, card_holder, expiration_date, security_code, amount)
+                        payment.tries +=1
+                        return resp
 
         except:
             return Response("Internal Server error", status=500)
