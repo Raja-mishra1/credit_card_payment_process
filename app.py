@@ -1,6 +1,6 @@
 from flask import Flask, jsonify, request
 from config import FLASK_SERVER, FLASK_PORT, FLASK_LOGGING
-from process_payment import process_payment
+from process_payment import Payment
 app = Flask(__name__)
 
 
@@ -11,7 +11,8 @@ def member_create():
     expiration_date = request.json["ExpirationDate"]
     security_code = request.json["SecurityCode"]
     amount = request.json["Amount"]
-    response = process_payment(credit_card_number,card_holder,expiration_date,security_code,amount)
+    pay = Payment()
+    response = pay.process_payment(credit_card_number,card_holder,expiration_date,security_code,amount)
     return response
 
 

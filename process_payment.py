@@ -10,6 +10,7 @@ class Validate:
         self.expiration_date = expiration_date
         self.security_code = security_code
         self.amount = amount
+        
 
     def validate_credit_card_number(self,credit_card_number):
         """[Validates credit card number used in transaction by using Luhn algorithm]
@@ -83,35 +84,53 @@ class Validate:
             return Response("Bad request", status=400)
 
 
+class Payment:
+    def __init__(self):
+        self.tries = 0
 
-def process_payment(credit_card_number, card_holder, expiration_date, security_code, amount):
-    """[Validates credit card related data and passes payment related to payment gateway]
+    def process_payment(self,credit_card_number, card_holder, expiration_date, security_code, amount):
+        """[Validates credit card related data and passes payment related to payment gateway]
 
-    Args:
-        credit_card_number ([str]): [credit card number used in the transaction]
-        card_holder ([str]): [Name of credit card holder]
-        expiration_date ([datetime]): [Expiration date of credit card]
-        security_code ([str]): [Security code of credit card]
-        amount ([float]): [Amount involved in the transaction]
+        Args:
+            credit_card_number ([str]): [credit card number used in the transaction]
+            card_holder ([str]): [Name of credit card holder]
+            expiration_date ([datetime]): [Expiration date of credit card]
+            security_code ([str]): [Security code of credit card]
+            amount ([float]): [Amount involved in the transaction]
 
-    Returns:
-        [response]: [Response from payment gateway]
-    """
-    v = Validate(credit_card_number, card_holder, expiration_date, security_code, amount)
-    v.validate_data()
-    try:
-        if amount <= 20:
-            resp = CheapPaymentGateway(credit_card_number, card_holder, expiration_date, security_code, amount)
-            return resp
-        if amount >= 21 or amount <= 500:
-            resp = ExpensivePaymentGateway(credit_card_number, card_holder, expiration_date, security_code, amount)
-            return resp
-        if amount >= 500:
-            resp = PremiumPaymentGateway(credit_card_number, card_holder, expiration_date, security_code, amount)
-            return resp
+        Returns:
+            [response]: [Response from payment gateway]
+        """
+        v = Validate(credit_card_number, card_holder, expiration_date, security_code, amount)
+        v.validate_data()
+        payment = Payment()
+        try:
+            if amount <= 20:
+                if object:
+                    resp = CheapPaymentGateway(credit_card_number, card_holder, expiration_date, security_code, amount)
+                    payment.tries +=1
+                    return resp
 
-    except:
-        return Response("Internal Server error", status=500)
-    
+            if amount >= 21 or amount <= 500:
+                if object:
+                    resp = ExpensivePaymentGateway(credit_card_number, card_holder, expiration_date, security_code, amount)
+                    payment.tries +=1
+                    return resp
+                else:
+                    resp = CheapPaymentGateway(credit_card_number, card_holder, expiration_date, security_code, amount)
+                    payment.tries +=1
+
+            if amount >= 500:
+                if object:
+                    resp = PremiumPaymentGateway(credit_card_number, card_holder, expiration_date, security_code, amount)
+                    payment.tries +=1
+                    return resp
+
+        except:
+            return Response("Internal Server error", status=500)
+
+
+
+        
 
     
