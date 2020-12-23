@@ -107,13 +107,13 @@ class Payment:
         payment = Payment()
         try:
             if amount <= 20:
-                if object:
+                if object: #used to check availability of payment gateway
                     resp = CheapPaymentGateway(credit_card_number, card_holder, expiration_date, security_code, amount)
                     payment.tries +=1
                     return resp
 
             if amount >= 21 or amount <= 500:
-                if object:
+                if object: #used to check availability of payment gateway
                     resp = ExpensivePaymentGateway(credit_card_number, card_holder, expiration_date, security_code, amount)
                     payment.tries +=1
                     return resp
@@ -122,7 +122,7 @@ class Payment:
                     payment.tries +=1
 
             if amount >= 500:
-                if object:
+                if object: #used to check availability of payment gateway
                     while payment.tries <= 3:
                         resp = PremiumPaymentGateway(credit_card_number, card_holder, expiration_date, security_code, amount)
                         payment.tries +=1
