@@ -17,4 +17,4 @@ def member_create():
 
 
 if __name__ == "__main__":
-    app.run(host=FLASK_SERVER, port=FLASK_PORT, debug=False, threaded=True)
+    app.run(host=FLASK_SERVER, port=FLASK_PORT, debug=False)
