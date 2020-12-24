@@ -13,7 +13,7 @@ class Validate:
         
 
     def validate_credit_card_number(self,credit_card_number):
-        """[Validates credit card number used in transaction by using Luhn algorithm]
+        """[Validates credit card number used in transaction by using Luhn's algorithm]
 
         Returns:
             [bool]: [Returns True if card number is valid otherwise False]
